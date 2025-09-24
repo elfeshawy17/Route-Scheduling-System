@@ -5,3 +5,4 @@ import { addDriverValidator } from "./driver.validation.js";
 export const driverRouter = Router();
 
 driverRouter.post('', addDriverValidator, driverController.addDriver);
+driverRouter.get('/:id/history', driverController.getDriverRoutes);
