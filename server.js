@@ -6,6 +6,7 @@ import HttpText from './src/utils/HttpText.js';
 import { driverRouter } from './src/modules/driver/driver.route.js';
 import { routeRouter } from './src/modules/route/route.route.js';
 import { startScheduleStatusJob } from './src/jobs/scheduleStatusJob.js';
+import { scheduleRouter } from './src/modules/schedule/schedule.route.js';
 
 const app = express();
 const port = process.env.SERVER_PORT;
@@ -15,6 +16,7 @@ app.use(express.json());
 
 app.use('/api/drivers', driverRouter);
 app.use('/api/routes', routeRouter);
+app.use('/api/schedules', scheduleRouter)
 
 dbConnection.then(() => startScheduleStatusJob());
 
