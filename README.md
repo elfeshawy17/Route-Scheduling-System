@@ -23,51 +23,6 @@
 
 ---
 
-## 🗄️ Database Architecture
-
-```mermaid
-erDiagram
-    DRIVER {
-        ObjectId _id PK
-        String   name
-        String   licenseType
-        Boolean  availability
-        DateTime createdAt
-        DateTime updatedAt
-    }
-
-    ROUTE {
-        ObjectId _id PK
-        String   startLocation
-        String   endLocation
-        Number   distance
-        String   estimatedTime
-        DateTime createdAt
-        DateTime updatedAt
-    }
-
-    SCHEDULE {
-        ObjectId _id PK
-        ObjectId driverId FK
-        ObjectId routeId  FK
-        DateTime startTime
-        DateTime endTime
-        Enum     status
-        DateTime createdAt
-        DateTime updatedAt
-    }
-
-    DRIVER ||--o{ SCHEDULE : "assigned to"
-    ROUTE  ||--o{ SCHEDULE : "scheduled on"
-```
-
-### 🔗 Relationships
-- **Driver** ↔ **Schedule**: `One-to-Many` (A driver can handle multiple routes over time)
-- **Route** ↔ **Schedule**: `One-to-Many` (A route can be scheduled multiple times)
-- **Schedule Status**: `active` | `completed` | `unassigned`
-
----
-
 ## 📡 API Endpoints
 
 | Method | Endpoint | Description | Features |
@@ -122,36 +77,32 @@ erDiagram
 
 ---
 
-## 🧠 System Logic & Assumptions
+## 🧠 Assumptions Made
 
-### 📊 Data Structure Design
-- **Driver Profiles**: Name, license type, and real-time availability status
-- **Route Definitions**: Start/end locations, distance metrics, and flexible time estimation
-- **Schedule Management**: Comprehensive linking system with automated status tracking
+- **Driver Assignment**: The first available driver is automatically assigned to a new route when created.
+- **Availability Management**: Drivers become unavailable during active schedules and are restored to available once the schedule ends.
+- **Auto-Completion**: A background cron job runs every minute to automatically mark expired schedules as completed.
+- **Unassigned Routes**: If no drivers are available, the route is created but marked as unassigned.
+- **Time Formats**: Supports natural language inputs like "2 hours 30 mins", "45 mins", or "1 hour".
+- **Pagination Defaults**: API endpoints return 4 items per page by default, with a customizable limit query parameter.
 
-### 🤖 Business Intelligence
-- **Smart Assignment**: First-available driver gets automatically assigned to new routes
-- **Availability Management**: Drivers become unavailable during active routes
-- **Auto-Completion**: System automatically completes expired schedules
-- **Fallback Handling**: Routes without available drivers are marked as "unassigned"
+---
 
-### 💡 System Behavior
-- **Time Format Flexibility**: Supports natural language like `"2 hours 30 mins"`, `"45 mins"`, `"1 hour"`
-- **Pagination Defaults**: 4 items per page with customizable limits
-- **Background Processing**: Cron job runs every minute for schedule maintenance
-- **Resilient Architecture**: Database connectivity is validated before critical operations
+## 🌟 Features Implemented
 
-### 🛡️ Error Handling Strategy
-- **404 Management**: Graceful handling of non-existent resources
-- **Validation Feedback**: Detailed, field-specific error messages
-- **Connection Resilience**: Comprehensive database failure logging
-- **Process Stability**: Cron job failures are isolated and logged without system crashes
+### 🚦 Core Functionality
+- **Driver Management**: Add drivers with license validation and real-time availability tracking.  
+- **Route Planning**: Create routes with automatic optimal driver assignment.  
+- **Dynamic Scheduling**: Track active, completed, and unassigned schedules in real time.  
+- **Driver History**: View detailed driver performance and schedule history with pagination.  
+- **Auto-Completion Engine**: Automated schedule completion and driver availability restoration via cron job.  
 
-### 🔐 Security Considerations
-- **Environment Protection**: `.env` file excluded from git repository
-- **Production Readiness**: Environment variables designed for secure deployment
-- **Database Security**: Production configurations should include authentication
-- **Sensitive Data**: No hardcoded credentials or sensitive information
+### 🔧 Technical Features
+- **Robust Data Validation** using Joi schemas.  
+- **Comprehensive Error Handling** with clear, field-specific messages.  
+- **Pagination & Filtering** for efficient data retrieval.  
+- **RESTful API Architecture** following modern Node.js best practices.  
+
 
 ---
 
