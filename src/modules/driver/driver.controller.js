@@ -5,7 +5,6 @@ import HttpText from '../../utils/HttpText.js';
 export const addDriver = asyncErrorHandler(
     async (req, res, next) => {
         const driver = await Driver.create(req.body);
-        driver.save();
 
         res.status(201).json({
             status: HttpText.SUCCESS,

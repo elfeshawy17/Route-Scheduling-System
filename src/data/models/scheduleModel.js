@@ -3,17 +3,12 @@ import { model, Schema } from "mongoose";
 const scheduleSchema = new Schema(
     {
         driverId: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: "Driver",
-            required: true
         },
         routeId: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: "Route",
-            required: true
-        },
-        date: {
-            type: Date,
             required: true
         },
         startTime: {
@@ -22,11 +17,10 @@ const scheduleSchema = new Schema(
         },
         endTime: {
             type: Date,
-            required: true
         },
         status: {
             type: String,
-            enum: ["active","completed", "cancelled"],
+            enum: ["active", "completed", "unassigned"],
             default: "active"
         }
     }, {
