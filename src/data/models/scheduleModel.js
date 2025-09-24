@@ -34,3 +34,5 @@ const scheduleSchema = new Schema(
         versionKey: false
     }
 );
+
+export const Schedule = model("Schedule", scheduleSchema);
